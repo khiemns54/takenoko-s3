@@ -5,7 +5,8 @@ module Takenoko
       return false unless table_data[:to_s3].present?
       raise 'bucket must be set' if table_data[:bucket].blank?
       raise 'attach_files empty' if table_data[:attach_files].blank?
-      bucket = Takenoko.s3.client.bucket(table_data[:bucket])
+      raise "Bucket not found:#{table_data[:bucket]}" unless bucket = Takenoko.s3.client.bucket(table_data[:bucket])
+
       table_data[:attach_files].each do |col|
         next unless col[:to_s3].present?
         table_data[:rows].each do |row|
