@@ -22,7 +22,7 @@ Example: config/initializers/takenoko.rb
 |s3.to_s3|Optional|false|Allow all attached files to be uploaded to s3|bool|Yes|
 |s3.bucket|Optional|nil|Bucket name|String|Yes|
 |s3.file_location|Optional|attached_files|S3 location for uploaded files|String|Yes|
-|s3.public|Optional|attached_files|Make public after uploading|String|Yes|
+|s3.s3_public|Optional|attached_files|Make public after uploading|String|Yes|
 
 ##Usage
 
