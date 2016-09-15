@@ -1,4 +1,4 @@
-require 'fog'
+require 'fog/aws'
 module Takenoko
   module S3
     class Client
