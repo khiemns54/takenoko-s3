@@ -11,10 +11,16 @@ module Takenoko
   end
 
   def upload_all_to_s3
+    errors = []
     mapping_config[:tables].each do |table,conf|
       next if conf[:attach_files].blank?
-      upload_table_to_s3 table
+      begin
+        upload_table_to_s3 table
+      rescue Exception => e
+        errors << e.to_s
+      end
     end
+    raise errors.join("\n") unless errors.empty?
     return true
   end
 
@@ -26,10 +32,16 @@ module Takenoko
   end
 
   def download_and_upload_all_to_s3
+    errors = []
     mapping_config[:tables].each do |table,conf|
       next if conf[:attach_files].blank?
-      download_and_upload_table_to_s3 table
+      begin
+        download_and_upload_table_to_s3 table
+      rescue Exception => e
+        errors << e.to_s
+      end
     end
+    raise errors.join("\n") unless errors.empty?
     return true
   end
 end
