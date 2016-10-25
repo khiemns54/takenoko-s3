@@ -23,12 +23,17 @@ module Takenoko
           end
 
           file = File.open(file_path)
-          s3_path = col[:s3_folder]+ "/" +  File.basename(row[col[:column_name]])
+          file_name = File.basename(row[col[:column_name]])
+          s3_path = col[:s3_folder]+ "/" +  file_name
 
-          find_val = row[table_data[:find_column]]
+          # find_val = row[table_data[:find_column]]
+          find_val = "#{col[:folder_id]}_#{file_name}"
 
           if log_data[find_val].present? && (f = bucket.files.get(s3_path))
-            next if log_data[find_val][:s3_last_upload] && log_data[find_val][:s3_last_upload] >= file.mtime.to_i
+            if log_data[find_val][:s3_last_upload] && log_data[find_val][:s3_last_upload] >= file.mtime.to_i
+              Rails.logger.info "Skip uploaded file: #{file_name}"
+              next
+            end
           end
 
           Rails.logger.info "Uploading to s3: #{file_path} -> #{s3_path}"
