@@ -27,8 +27,20 @@ module Takenoko
   def download_and_upload_table_to_s3(table_name)
     table_data = google_client.get_table(table_name)
     raise "attach_files not set" unless table_data[:attach_files].present?
-    AttachHelper.download table_data
-    AttachHelper.upload_to_s3 table_data 
+    errors = []
+    begin
+      AttachHelper.download table_data
+    rescue Exception => e
+        errors << e.to_s
+    end
+
+    begin
+      AttachHelper.upload_to_s3 table_data 
+    rescue Exception => e
+        errors << e.to_s
+    end
+    raise errors.join("\n") unless errors.empty?
+    return true
   end
 
   def download_and_upload_all_to_s3
