@@ -29,6 +29,9 @@ module Takenoko
     mattr_accessor :s3_public
     @@s3_public = false
 
+    mattr_accessor :upload_options
+    @@upload_options = {}
+
     @@client = nil
 
     def client

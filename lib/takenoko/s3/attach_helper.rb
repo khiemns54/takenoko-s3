@@ -37,11 +37,11 @@ module Takenoko
           end
 
           Rails.logger.info "Uploading to s3: #{file_path} -> #{s3_path}"
-          f = bucket.files.create({
+          f = bucket.files.create(Takenoko.s3.upload_options.merge({
             key: s3_path,
             body: file,
             public: col[:s3_public],
-          })
+          }))
 
           log_data[find_val] ||= {}
           log_data[find_val][:s3_last_upload] = file.mtime.to_i
